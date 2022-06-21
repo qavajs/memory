@@ -1,13 +1,13 @@
-## @yaatp/memory
+## @qavajs/memory
 
 This library provides the capability to transit variables between step and access them from gherkin definitions
 
-`npm install @yaatp/memory`
+`npm install @qavajs/memory`
 ## Usage
        
 Lib resolves provided value from storage
 ```javascript
-const memory = require('@yaatp/memory');
+const memory = require('@qavajs/memory');
 
 When(/^save variable as '(.+)'$/, async function (key) {
     memory.setValue(key, 42);
@@ -40,7 +40,7 @@ module.exports = {
 Before using memory it needs to be registered. The best place to do it is Before hook
 
 ```javascript
-const memory = require('@yaatp/memory');
+const memory = require('@qavajs/memory');
 const memoryMap = require('./memoryMap.js')
 Before(async function() {
     memory.register(memoryMap);
