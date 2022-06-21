@@ -4,6 +4,6 @@ declare type Memory = {
     getValue(key: string): any;
 }
 declare const memory: Memory;
-declare module '@yaatp/memory' {
+declare module '@qavajs/memory' {
     export default memory
 }

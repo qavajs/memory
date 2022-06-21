@@ -1,7 +1,7 @@
 {
   "name": "@qavajs/memory",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "memory package for @qavajs framework",
   "main": "index.js",
   "scripts": {
     "test": "jest"
