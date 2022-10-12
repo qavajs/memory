@@ -1,6 +1,5 @@
 const KEY_REGEXP = /^\$(.+?)(\((.*)\))?$/;
 const PARSE_STRING_REGEXP = /({\$.+?})/g;
-const PARAMS_SPLIT_REGEXP = /\s*,\s*/;
 const QUOTES_REPLACE_REGEXP = /^['"]|['"]$/g;
 const STRING_TYPE_REGEXP = /^'.+'|".+"$/;
 const NUMBER_TYPE_REGEXP = /^\d+|\d+\.\d+$/;
@@ -76,13 +75,27 @@ class Memory {
      * Extract arguments for computed function
      * @private
      * @param {string} str - string with params
-     * @returns {Array<string>} - array of params
+     * @returns {Array<any>} - array of params
      */
     getComputedParams(str) {
         const paramsString = str.match(KEY_REGEXP);
         if (!(paramsString && paramsString[3])) return []
-        const params = paramsString[3].split(PARAMS_SPLIT_REGEXP);
-        return params.map(p => {
+        const params = [];
+        let singleQuoteClosed = true;
+        let doubleQuoteClosed = true;
+        let param = '';
+        for (const char of paramsString[3]) {
+            if (char === `'` && doubleQuoteClosed) singleQuoteClosed = !singleQuoteClosed;
+            if (char === `"` && singleQuoteClosed) doubleQuoteClosed = !doubleQuoteClosed;
+            if (char === `,` && singleQuoteClosed && doubleQuoteClosed) {
+                params.push(param);
+                param = '';
+            } else {
+                param += char;
+            }
+        }
+        if (param !== '') params.push(param)
+        return params.map(p => p.trim()).map(p => {
             if (STRING_TYPE_REGEXP.test(p)) return p.replace(QUOTES_REPLACE_REGEXP, '')
             if (NUMBER_TYPE_REGEXP.test(p)) return parseFloat(p)
             if (KEY_REGEXP.test(p)) return this.getValue(p)
