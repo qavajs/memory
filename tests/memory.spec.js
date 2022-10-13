@@ -151,3 +151,28 @@ test('property from added object', () => {
 
 	expect(memory.getValue('$obj.prop')).to.equal(42);
 });
+
+test('comma in string param', () => {
+	const computed = (param) => param;
+	memory.setValue('computed', computed);
+	expect(memory.getValue(`$computed("1,2")`)).to.equal('1,2');
+	expect(memory.getValue(`$computed('1,2')`)).to.equal('1,2');
+});
+
+test('single quote in double quote', () => {
+	const computed = (param) => param;
+	memory.setValue('computed', computed);
+	expect(memory.getValue(`$computed("'test'")`)).to.eql(`'test'`);
+});
+
+test('double quote in single quote', () => {
+	const computed = (param) => param;
+	memory.setValue('computed', computed);
+	expect(memory.getValue(`$computed('"test"')`)).to.eql(`"test"`);
+});
+
+test('floating param', () => {
+	const computed = (param) => param;
+	memory.setValue('computed', computed);
+	expect(memory.getValue(`$computed(36.6)`)).to.eql(36.6);
+});
