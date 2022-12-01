@@ -176,3 +176,11 @@ test('floating param', () => {
 	memory.setValue('computed', computed);
 	expect(memory.getValue(`$computed(36.6)`)).to.eql(36.6);
 });
+
+test('store function', () => {
+	const computed = (param) => param;
+	memory.setValue('computed', computed);
+	const fn = memory.getValue(`$computed`);
+	expect(fn).to.be.a('function');
+	expect(fn(42)).to.equal(42)
+});

@@ -39,7 +39,7 @@ class Memory {
         const key = keyMatch ? keyMatch[1] : null;
         if (key) {
             const value = this.getProperty(key);
-            if (typeof value === 'function') {
+            if (typeof value === 'function' && str.includes('(') && str.includes(')')) {
                 const params = this.getComputedParams(str);
                 return value.apply(null, params)
             }
