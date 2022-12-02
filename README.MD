@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/@qavajs%2Fmemory.svg)](https://badge.fury.io/js/@qavajs%2Fmemory)
+
 ## @qavajs/memory
 
 This library provides the capability to transit variables between step and access them from gherkin definitions
@@ -30,11 +32,10 @@ Lib provides capability to set constant values and computed (values that calcula
 ```javascript
 module.exports = {
     CONSTANT: 42,
-    computed: function() {
+    now: function() {
         return Date.now()
     }
 };
-
 ```
 ## Register constants and computed
 Before using memory it needs to be registered. The best place to do it is Before hook
