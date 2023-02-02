@@ -1,4 +1,5 @@
 const KEY_REGEXP = /^\$(.+?)(\((.*)\))?$/;
+const ESCAPED_REGEXP = /^\\\$/;
 const PARSE_STRING_REGEXP = /({\$.+?})/g;
 const QUOTES_REPLACE_REGEXP = /^['"]|['"]$/g;
 const STRING_TYPE_REGEXP = /^'.+'|".+"$/;
@@ -13,9 +14,10 @@ class Memory {
      * @example const value = memory.getValue('$val');
      */
     getValue(str) {
-        if (KEY_REGEXP.test(str)) return this.getKey(str)
-        if (PARSE_STRING_REGEXP.test(str)) return this.getString(str)
-        return str
+        if (ESCAPED_REGEXP.test(str)) return str.replace('\\$', '$');
+        if (KEY_REGEXP.test(str)) return this.getKey(str);
+        if (PARSE_STRING_REGEXP.test(str)) return this.getString(str);
+        return str;
     }
 
     /**

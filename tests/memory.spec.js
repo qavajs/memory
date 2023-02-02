@@ -184,3 +184,11 @@ test('store function', () => {
 	expect(fn).to.be.a('function');
 	expect(fn(42)).to.equal(42)
 });
+
+test('escape $ as simple value', () => {
+	expect(memory.getValue('\\$val')).to.equal('$val');
+});
+
+test('escape $ as computed', () => {
+	expect(memory.getValue('\\$computed()')).to.equal('$computed()');
+});

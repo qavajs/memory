@@ -47,3 +47,10 @@ Before(async function() {
     memory.register(memoryMap);
 });
 ```
+
+## Escape $
+_$_ can be escaped with double backslash
+
+```Gherkin
+When I expect text of 'Currency Label' to equal '\\$42'
+```
