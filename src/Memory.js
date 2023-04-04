@@ -40,10 +40,10 @@ class Memory {
         const keyMatch = str.match(KEY_REGEXP);
         const key = keyMatch ? keyMatch[1] : null;
         if (key) {
-            const value = this.getProperty(key);
+            const { value, ctx } = this.getProperty(key);
             if (typeof value === 'function' && str.includes('(') && str.includes(')')) {
                 const params = this.getComputedParams(str);
-                return value.apply(null, params)
+                return value.apply(ctx, params)
             }
             return value
         }
@@ -59,7 +59,7 @@ class Memory {
         const props = key.replace(/]/g, '').split(/[[.]/).map(prop => prop.replace(QUOTES_REPLACE_REGEXP, ''));
         const obj = this[props.shift()];
         if (obj === undefined) throw new Error(`${key} is not found in memory`);
-        return props.reduce((value, prop) => value[prop], obj)
+        return props.reduce((prev, prop) => ({value: prev.value[prop], ctx: prev.value}), {value: obj, ctx: null})
     }
 
     /**
