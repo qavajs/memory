@@ -192,3 +192,13 @@ test('escape $ as simple value', () => {
 test('escape $ as computed', () => {
 	expect(memory.getValue('\\$computed()')).to.equal('$computed()');
 });
+
+test('save context for methods', () => {
+	memory.setValue('obj', {
+		prop: 42,
+		getProp() {
+			return this.prop
+		}
+	})
+	expect(memory.getValue('$obj.getProp()')).to.equal(42);
+});
