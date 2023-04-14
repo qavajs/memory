@@ -4,6 +4,9 @@ All notable changes to the "@qavajs/memory" will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.3.0]
+- :rocket: implemented chaining of computed results
+
 ## [1.2.1]
 - :beetle: fixed context for methods calling
 
