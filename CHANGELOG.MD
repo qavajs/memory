@@ -6,6 +6,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [1.3.0]
 - :rocket: implemented chaining of computed results
+- :beetle: fixed empty string as computed param
 
 ## [1.2.1]
 - :beetle: fixed context for methods calling

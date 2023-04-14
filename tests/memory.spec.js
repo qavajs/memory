@@ -237,3 +237,8 @@ test('inner method call', () => {
 	expect(memory.getValue('$obj1.method1($obj2.method1(42))')).to.equal(42);
 });
 
+test('empty string', () => {
+	memory.setValue('fn', function (val) { return val })
+	expect(memory.getValue('$fn("")')).to.equal('');
+	expect(memory.getValue("$fn('')")).to.equal('');
+});

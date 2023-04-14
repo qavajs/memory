@@ -3,7 +3,7 @@ const PARAMS_REGEXP = /^(.+?)(\((.*)\))?$/;
 const ESCAPED_REGEXP = /^\\\$/;
 const PARSE_STRING_REGEXP = /({\$.+?})/g;
 const QUOTES_REPLACE_REGEXP = /^['"]|['"]$/g;
-const STRING_TYPE_REGEXP = /^'.+'|".+"$/;
+const STRING_TYPE_REGEXP = /^'.*'|".*"$/;
 const NUMBER_TYPE_REGEXP = /^\d+|\d+\.\d+$/;
 
 class Memory {
