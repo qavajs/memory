@@ -1,8 +1,9 @@
 const KEY_REGEXP = /^\$(.+?)(\((.*)\))?$/;
+const PARAMS_REGEXP = /^(.+?)(\((.*)\))?$/;
 const ESCAPED_REGEXP = /^\\\$/;
 const PARSE_STRING_REGEXP = /({\$.+?})/g;
 const QUOTES_REPLACE_REGEXP = /^['"]|['"]$/g;
-const STRING_TYPE_REGEXP = /^'.+'|".+"$/;
+const STRING_TYPE_REGEXP = /^'.*'|".*"$/;
 const NUMBER_TYPE_REGEXP = /^\d+|\d+\.\d+$/;
 
 class Memory {
@@ -37,29 +38,20 @@ class Memory {
      * @returns {any} - resolved value
      */
     getKey(str) {
-        const keyMatch = str.match(KEY_REGEXP);
-        const key = keyMatch ? keyMatch[1] : null;
-        if (key) {
-            const { value, ctx } = this.getProperty(key);
-            if (typeof value === 'function' && str.includes('(') && str.includes(')')) {
-                const params = this.getComputedParams(str);
-                return value.apply(ctx, params)
+        const props = this.parseChain(str);
+        props[0] = props[0].replace(/^\$/, '');
+        const traverse = props.reduce((prev, prop) => {
+            const ctx = prev.value;
+            const key = prop.replace(/\((.*)\)/, '');
+            let value = ctx[key];
+            if (value === undefined) throw new Error(`${str}\n'${key}' is not defined`);
+            if (typeof value === 'function' && prop.includes('(') && prop.includes(')')) {
+                const params = this.getComputedParams(prop);
+                value = value.apply(ctx, params)
             }
-            return value
-        }
-    }
-
-    /**
-     * Resolve object
-     * @private
-     * @param {string} key - key to resolve
-     * @returns {any} - resolved value
-     */
-    getProperty(key) {
-        const props = key.replace(/]/g, '').split(/[[.]/).map(prop => prop.replace(QUOTES_REPLACE_REGEXP, ''));
-        const obj = this[props.shift()];
-        if (obj === undefined) throw new Error(`${key} is not found in memory`);
-        return props.reduce((prev, prop) => ({value: prev.value[prop], ctx: prev.value}), {value: obj, ctx: null})
+            return {value, ctx}
+        }, {value: this, ctx: null});
+        return traverse.value
     }
 
     /**
@@ -80,7 +72,7 @@ class Memory {
      * @returns {Array<any>} - array of params
      */
     getComputedParams(str) {
-        const paramsString = str.match(KEY_REGEXP);
+        const paramsString = str.match(PARAMS_REGEXP);
         if (!(paramsString && paramsString[3])) return []
         const params = [];
         let singleQuoteClosed = true;
@@ -113,6 +105,44 @@ class Memory {
             this[prop] = obj[prop];
         }
     }
+
+    parseChain(chain) {
+        const tokens = [];
+        let currentToken = '';
+        let insideSquareBracket = false;
+        let insideParenthesis = false;
+
+        for (let i = 0; i < chain.length; i++) {
+            const char = chain.charAt(i);
+
+            if (char === '.' && !insideSquareBracket && !insideParenthesis) {
+                tokens.push(currentToken);
+                currentToken = '';
+            } else if (char === '[') {
+                insideSquareBracket = true;
+                tokens.push(currentToken);
+                currentToken = '';
+            } else if (char === ']' && insideSquareBracket) {
+                insideSquareBracket = false;
+                tokens.push(currentToken);
+                currentToken = '';
+            } else {
+                if (char === '(') {
+                    insideParenthesis = true;
+                } else if (char === ')') {
+                    insideParenthesis = false
+                }
+                currentToken += char;
+            }
+        }
+
+        if (currentToken !== '') {
+            tokens.push(currentToken);
+        }
+
+        return tokens.filter(token => token).map(token => token.replace(QUOTES_REPLACE_REGEXP, ''));
+    }
+
 }
 
 module.exports = new Memory();

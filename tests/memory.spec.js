@@ -52,7 +52,7 @@ test('simple string returns as is', () => {
 });
 
 test('throw error if key is not present in memory', () => {
-	expect(() => memory.getValue('$val')).to.throw('val is not found in memory');
+	expect(() => memory.getValue('$val')).to.throw('$val\n\'val\' is not defined');
 });
 
 test('memory is singleton', () => {
@@ -81,7 +81,7 @@ test('query string with two existing variables', () => {
 test('throws for query string with one existing and one non-existent variables', () => {
 	memory.ind1 = 3;
 	const queryString = 'Component > #{$ind1} of Collection1 > #{$notExists} of Collection2'
-	expect(() => memory.getValue(queryString)).to.throw('notExists is not found in memory');
+	expect(() => memory.getValue(queryString)).to.throw('$notExists\n\'notExists\' is not defined');
 });
 
 test('property from object in dot notation', () => {
@@ -201,4 +201,44 @@ test('save context for methods', () => {
 		}
 	})
 	expect(memory.getValue('$obj.getProp()')).to.equal(42);
+});
+
+test('chaining method calls', () => {
+	memory.setValue('obj', {
+		method1() {
+			return {
+				method2() {
+					return 'Im method'
+				},
+				prop: 42
+			}
+		}
+	})
+	expect(memory.getValue('$obj.method1().method2()')).to.equal('Im method');
+	expect(memory.getValue('$obj.method1().prop')).to.equal(42);
+});
+
+test('inner computed call', () => {
+	memory.setValue('comp1', function (val) { return val });
+	expect(memory.getValue('$comp1($comp1(42))')).to.equal(42);
+});
+
+test('inner method call', () => {
+	memory.setValue('obj1', {
+		method1(val) {
+			return val
+		}
+	})
+	memory.setValue('obj2', {
+		method1(val) {
+			return val
+		}
+	})
+	expect(memory.getValue('$obj1.method1($obj2.method1(42))')).to.equal(42);
+});
+
+test('empty string', () => {
+	memory.setValue('fn', function (val) { return val })
+	expect(memory.getValue('$fn("")')).to.equal('');
+	expect(memory.getValue("$fn('')")).to.equal('');
 });
