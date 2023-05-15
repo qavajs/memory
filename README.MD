@@ -54,3 +54,20 @@ _$_ can be escaped with double backslash
 ```Gherkin
 When I expect text of 'Currency Label' to equal '\\$42'
 ```
+
+## Parallel
+In case you need to assign uniq value for each Cucumber thread you can use parallel function.
+It will assign value based on CUCUMBER_WORKER_ID env variable. 
+
+```javascript
+const { parallel } = require('@qavajs/memory/utils');
+
+class Memory {
+    user = parallel([
+        { username: 'user1', password: 'password' },
+        { username: 'user2', password: 'password' }
+    ]);
+}
+
+module.exports = Memory;
+```
