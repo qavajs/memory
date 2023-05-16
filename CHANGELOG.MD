@@ -4,6 +4,9 @@ All notable changes to the "@qavajs/memory" will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.4.1]
+- :beetle: fixed issue with square brackets in computed params
+
 ## [1.4.0]
 - :rocket: added _parallel_ util function
 

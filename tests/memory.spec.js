@@ -242,3 +242,30 @@ test('empty string', () => {
 	expect(memory.getValue('$fn("")')).to.equal('');
 	expect(memory.getValue("$fn('')")).to.equal('');
 });
+
+test('param is property array element', () => {
+	memory.setValue('obj1', {
+		method1(val) {
+			return val
+		}
+	})
+	memory.setValue('obj2', {
+		arr: [1, 42]
+	})
+	expect(memory.getValue('$obj1.method1($obj2.arr[1])')).to.equal(42);
+});
+
+test('param is space containing property', () => {
+	memory.setValue('obj1', {
+		method1(val) {
+			return val
+		}
+	})
+	memory.setValue('obj2', {
+		obj: {
+			"contain space": 42
+		}
+	})
+	expect(memory.getValue('$obj1.method1($obj2.obj["contain space"])')).to.equal(42);
+});
+

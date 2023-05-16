@@ -118,11 +118,11 @@ class Memory {
             if (char === '.' && !insideSquareBracket && !insideParenthesis) {
                 tokens.push(currentToken);
                 currentToken = '';
-            } else if (char === '[') {
+            } else if (char === '[' && !insideParenthesis) {
                 insideSquareBracket = true;
                 tokens.push(currentToken);
                 currentToken = '';
-            } else if (char === ']' && insideSquareBracket) {
+            } else if (char === ']' && !insideParenthesis && insideSquareBracket) {
                 insideSquareBracket = false;
                 tokens.push(currentToken);
                 currentToken = '';
