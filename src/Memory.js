@@ -110,7 +110,7 @@ class Memory {
         const tokens = [];
         let currentToken = '';
         let insideSquareBracket = false;
-        let insideParenthesis = false;
+        let insideParenthesis = 0;
 
         for (let i = 0; i < chain.length; i++) {
             const char = chain.charAt(i);
@@ -128,9 +128,9 @@ class Memory {
                 currentToken = '';
             } else {
                 if (char === '(') {
-                    insideParenthesis = true;
+                    insideParenthesis++;
                 } else if (char === ')') {
-                    insideParenthesis = false
+                    insideParenthesis--;
                 }
                 currentToken += char;
             }

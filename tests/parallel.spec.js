@@ -1,5 +1,5 @@
-const { expect } = require('chai');
-const { parallel } = require('../utils');
+import { test, expect } from 'vitest';
+import { parallel } from '../utils';
 
 test('return value if environment value is not set', () => {
 	expect(parallel([1, 2])).to.equal(1);

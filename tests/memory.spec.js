@@ -1,4 +1,4 @@
-const { expect } = require('chai');
+import { test, expect } from 'vitest';
 const memory = require('../src/Memory');
 
 test('computed without params returns value', () => {
@@ -56,10 +56,9 @@ test('throw error if key is not present in memory', () => {
 });
 
 test('memory is singleton', () => {
-	require('./memory_singleton');
-	expect(memory.getValue('$singletonVal')).to.equal('singleton');
+	require('./memory_singleton.cjs');
+	expect(memory.getValue('$singletonVal')).to.equal('singleton cjs');
 });
-
 
 // Query tests
 
@@ -268,4 +267,26 @@ test('param is space containing property', () => {
 	})
 	expect(memory.getValue('$obj1.method1($obj2.obj["contain space"])')).to.equal(42);
 });
+
+test('dot in computed fn string param', () => {
+	memory.setValue('fn', function (...params) {
+		return params
+	});
+	memory.setValue('val', 10);
+	expect(memory.getValue('$fn($val, "some.value")')).to.deep.equal([10, 'some.value']);
+});
+
+test('dot in computed method string param', () => {
+	memory.setValue('obj', {
+		method(...params) {
+			return params
+		}
+	});
+	memory.setValue('fn', function (...params) {
+		return params
+	});
+	memory.setValue('val', 10);
+	expect(memory.getValue('$obj.method($val, $fn("another.value"), "some.value")')).to.deep.equal([10, ['another.value'], 'some.value']);
+});
+
 

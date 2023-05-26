@@ -1,3 +1,3 @@
 const memory = require('../src/Memory');
 
-memory.singletonVal = 'singleton';
+memory.singletonVal = 'singleton cjs';
