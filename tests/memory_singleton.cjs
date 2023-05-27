@@ -1,3 +1,3 @@
-const memory = require('../src/Memory');
+const memory = require('../index');
 
 memory.singletonVal = 'singleton cjs';

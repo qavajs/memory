@@ -2,7 +2,7 @@
 
 ## @qavajs/memory
 
-This library provides the capability to transit variables between step and access them from gherkin definitions
+This library provides single storage of variables for @qavajs framework
 
 `npm install @qavajs/memory`
 ## Usage
@@ -62,12 +62,12 @@ It will assign value based on CUCUMBER_WORKER_ID env variable.
 ```javascript
 const { parallel } = require('@qavajs/memory/utils');
 
-class Memory {
+class Memory_old {
     user = parallel([
         { username: 'user1', password: 'password' },
         { username: 'user2', password: 'password' }
     ]);
 }
 
-module.exports = Memory;
+module.exports = Memory_old;
 ```
