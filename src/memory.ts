@@ -69,7 +69,7 @@ class Memory {
 
     /**
      * Register memory object
-     * @param obj - object to register
+     * @param {{ [prop: string]: any }} obj - memory object to register
      */
     @readonly
     register(obj: { [prop: string]: any }) {
@@ -80,7 +80,7 @@ class Memory {
 
     /**
      * Evaluate js expression
-     * @param expression
+     * @param {any} expression - expression to evaluate
      * @example $js($val + 1)
      */
     @readonly

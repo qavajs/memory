@@ -283,6 +283,11 @@ test('use value from closure', () => {
 	expect(memory.getValue('$fn()')).to.equal(42);
 });
 
+test('interpolation without memory values', () => {
+	expect(memory.getValue('some {string}')).to.equal('some {string}');
+});
+
+
 
 
 
