@@ -4,6 +4,16 @@ All notable changes to the "@qavajs/memory" will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.5.0]
+Breaking Change:
+Memory no more throwing error if value does not exist. Instead, _undefined_ is returned.
+- :rocket: refactored and simplified whole library
+- :rocket: added _$js_ computed to evaluate expression
+```javascript
+const result = memory.getValue('$js($val + 1)'); // evaluates js expression
+```
+- :rocket: all JS types are now supported in computed
+
 ## [1.4.2]
 - :beetle: fixed issue with dots in computed params
 

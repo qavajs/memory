@@ -1,2 +1,1 @@
-const memory = require('./src/Memory');
-module.exports = memory;
+module.exports = require('./lib/memory').default;

@@ -1,10 +1,11 @@
 {
   "name": "@qavajs/memory",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "description": "memory package for @qavajs framework",
   "main": "index.js",
   "scripts": {
-    "test": "vitest run"
+    "test": "vitest --coverage run",
+    "build": "tsc"
   },
   "authors": [
     "Alexandr Galichenko",
@@ -12,6 +13,9 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "@vitest/coverage-c8": "^0.31.1",
+    "@vitest/ui": "^0.31.1",
+    "typescript": "^5.0.4",
     "vitest": "^0.31.1"
   }
 }

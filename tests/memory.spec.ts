@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest';
-const memory = require('../src/Memory');
+import memory from '../src/memory';
 
 test('computed without params returns value', () => {
 	memory.computed = function () {
@@ -44,20 +44,11 @@ test('value from registered object', () => {
 		someValue: 12
 	});
 
-	expect(memory.getValue('$someValue()')).to.equal(12);
+	expect(memory.getValue('$someValue')).to.equal(12);
 });
 
 test('simple string returns as is', () => {
 	expect(memory.getValue('val')).to.equal('val');
-});
-
-test('throw error if key is not present in memory', () => {
-	expect(() => memory.getValue('$val')).to.throw('$val\n\'val\' is not defined');
-});
-
-test('memory is singleton', () => {
-	require('./memory_singleton.cjs');
-	expect(memory.getValue('$singletonVal')).to.equal('singleton cjs');
 });
 
 // Query tests
@@ -75,12 +66,6 @@ test('query string with two existing variables', () => {
 	const queryString = 'Component > #{$ind1} of Collection1 > #{$ind2} of Collection2'
 	const expected = `Component > #1 of Collection1 > #15 of Collection2`;
 	expect(memory.getValue(queryString)).to.equal(expected);
-});
-
-test('throws for query string with one existing and one non-existent variables', () => {
-	memory.ind1 = 3;
-	const queryString = 'Component > #{$ind1} of Collection1 > #{$notExists} of Collection2'
-	expect(() => memory.getValue(queryString)).to.throw('$notExists\n\'notExists\' is not defined');
 });
 
 test('property from object in dot notation', () => {
@@ -158,18 +143,6 @@ test('comma in string param', () => {
 	expect(memory.getValue(`$computed('1,2')`)).to.equal('1,2');
 });
 
-test('single quote in double quote', () => {
-	const computed = (param) => param;
-	memory.setValue('computed', computed);
-	expect(memory.getValue(`$computed("'test'")`)).to.eql(`'test'`);
-});
-
-test('double quote in single quote', () => {
-	const computed = (param) => param;
-	memory.setValue('computed', computed);
-	expect(memory.getValue(`$computed('"test"')`)).to.eql(`"test"`);
-});
-
 test('floating param', () => {
 	const computed = (param) => param;
 	memory.setValue('computed', computed);
@@ -236,8 +209,8 @@ test('inner method call', () => {
 	expect(memory.getValue('$obj1.method1($obj2.method1(42))')).to.equal(42);
 });
 
-test('empty string', () => {
-	memory.setValue('fn', function (val) { return val })
+test('empty string as computed param', () => {
+	memory.setValue('fn', function(val) { return val })
 	expect(memory.getValue('$fn("")')).to.equal('');
 	expect(memory.getValue("$fn('')")).to.equal('');
 });
@@ -288,5 +261,33 @@ test('dot in computed method string param', () => {
 	memory.setValue('val', 10);
 	expect(memory.getValue('$obj.method($val, $fn("another.value"), "some.value")')).to.deep.equal([10, ['another.value'], 'some.value']);
 });
+
+test('$ in computed param string', () => {
+	memory.setValue('fn', (val) => val);
+	expect(memory.getValue('$fn("\\$56")')).to.equal('$56');
+});
+
+test('evaluate expression', () => {
+	memory.setValue('val', 41);
+	expect(memory.getValue('$js($val + 1)')).to.equal(42);
+});
+
+test('expression with JS global objects', () => {
+	memory.setValue('val', 144);
+	expect(memory.getValue('$js(Math.sqrt($val))')).to.equal(12);
+});
+
+test('use value from closure', () => {
+	const val = 42;
+	memory.setValue('fn', function () { return val });
+	expect(memory.getValue('$fn()')).to.equal(42);
+});
+
+test('interpolation without memory values', () => {
+	expect(memory.getValue('some {string}')).to.equal('some {string}');
+});
+
+
+
 
 

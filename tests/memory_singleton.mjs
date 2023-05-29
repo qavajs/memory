@@ -1,3 +1,3 @@
-import memory from '../src/Memory';
+import memory from '../index.js';
 
 memory.singletonVal = 'singleton mjs';
