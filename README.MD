@@ -62,12 +62,12 @@ It will assign value based on CUCUMBER_WORKER_ID env variable.
 ```javascript
 const { parallel } = require('@qavajs/memory/utils');
 
-class Memory_old {
+class Memory {
     user = parallel([
         { username: 'user1', password: 'password' },
         { username: 'user2', password: 'password' }
     ]);
 }
 
-module.exports = Memory_old;
+module.exports = Memory;
 ```
