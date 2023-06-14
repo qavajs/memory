@@ -287,6 +287,12 @@ test('interpolation without memory values', () => {
 	expect(memory.getValue('some {string}')).to.equal('some {string}');
 });
 
+test('non string input', () => {
+	//@ts-ignore
+	expect(memory.getValue(42)).to.equal(42);
+});
+
+
 
 
 

@@ -19,6 +19,7 @@ class Memory {
      */
     @readonly
     getValue(str: string) {
+        if (typeof str !== 'string') return str;
         const escapedString = str.replace(ESCAPE_DOLLAR_REGEXP, QAVA_ESCAPE_DOLLAR);
         if (KEY_REGEXP.test(escapedString)) return this.getKey(escapedString);
         if (PARSE_STRING_REGEXP.test(escapedString)) return this.getString(escapedString);
