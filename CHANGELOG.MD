@@ -4,6 +4,9 @@ All notable changes to the "@qavajs/memory" will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.5.1]
+- :beetle: fixed issue with non string inputs
+
 ## [1.5.0]
 Breaking Change:
 Memory no more throwing error if value does not exist. Instead, _undefined_ is returned.
