@@ -75,10 +75,3 @@ test('log long string', () => {
 	memory.getValue('$key');
 	expect(logger.logs.pop()).to.equal(`$key -> ${thousand}`);
 });
-
-
-
-
-
-
-
