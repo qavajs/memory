@@ -35,6 +35,7 @@ class Memory {
      * @returns {any} - resolved value
      * @example const value = memory.getValue('$val');
      */
+    @readonly
     getValue(str: string) {
         let value;
         if (typeof str !== 'string') return str;
