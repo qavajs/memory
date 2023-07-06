@@ -4,6 +4,9 @@ All notable changes to the "@qavajs/memory" will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.6.0]
+- :rocket: added capability to provide logger
+
 ## [1.5.1]
 - :beetle: fixed issue with non string inputs
 
