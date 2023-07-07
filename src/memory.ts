@@ -3,13 +3,31 @@ const KEY_REGEXP = /^\$(.+?)(\((.*)\))?$/;
 const PARSE_STRING_REGEXP = /({\$.+?})/g;
 const ESCAPE_DOLLAR_REGEXP = /\\\$/g;
 const UNESCAPE_DOLLAR_REGEXP = new RegExp(QAVA_ESCAPE_DOLLAR, 'g');
+const TRUNCATE_LOG = 1000;
 
 function readonly(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     descriptor.writable = false;
 }
+
+function toString(value: any): string {
+    let logValue = value;
+    try {
+        if (typeof value === 'object') {
+            logValue = JSON.stringify(value, null, 2);
+        }
+    } catch (err) {
+        logValue = value.toString();
+    }
+    if (typeof logValue === 'string') {
+        return logValue.slice(0, TRUNCATE_LOG);
+    }
+    return logValue;
+}
+
 class Memory {
 
     [prop: string]: any;
+    logger: { log: (value: any) => void } = { log() {} };
 
     /**
      * Get value from memory
@@ -19,11 +37,14 @@ class Memory {
      */
     @readonly
     getValue(str: string) {
+        let value;
         if (typeof str !== 'string') return str;
-        const escapedString = str.replace(ESCAPE_DOLLAR_REGEXP, QAVA_ESCAPE_DOLLAR);
-        if (KEY_REGEXP.test(escapedString)) return this.getKey(escapedString);
-        if (PARSE_STRING_REGEXP.test(escapedString)) return this.getString(escapedString);
-        return escapedString.replace(UNESCAPE_DOLLAR_REGEXP, '$');
+        value = str.replace(ESCAPE_DOLLAR_REGEXP, QAVA_ESCAPE_DOLLAR);
+        if (KEY_REGEXP.test(value)) value = this.getKey(value);
+        if (PARSE_STRING_REGEXP.test(value)) value = this.getString(value);
+        if (typeof value === 'string') value = value.replace(UNESCAPE_DOLLAR_REGEXP, '$');
+        this.logger.log(`${str} -> ${toString(value)}`);
+        return value;
     }
 
     /**
@@ -87,6 +108,11 @@ class Memory {
     @readonly
     js(expression: any) {
         return expression;
+    }
+
+    @readonly
+    setLogger(logger: { log: (value: any) => void }) {
+        this.logger = logger;
     }
 
 }
