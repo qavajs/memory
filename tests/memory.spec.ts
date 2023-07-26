@@ -292,6 +292,11 @@ test('non string input', () => {
 	expect(memory.getValue(42)).to.equal(42);
 });
 
+test('empty object conversion', () => {
+	memory.setValue('key', {});
+	expect(memory.getValue('$key')).to.deep.equal({});
+});
+
 
 
 
