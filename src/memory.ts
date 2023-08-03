@@ -43,7 +43,10 @@ class Memory {
         if (KEY_REGEXP.test(value)) value = this.getKey(value);
         else if (PARSE_STRING_REGEXP.test(value)) value = this.getString(value);
         if (typeof value === 'string') value = value.replace(UNESCAPE_DOLLAR_REGEXP, '$');
-        this.logger.log(`${str} -> ${toString(value)}`);
+        const stringValue = toString(value);
+        if (stringValue !== str) {
+            this.logger.log(`${str} -> ${toString(value)}`);
+        }
         return value;
     }
 
