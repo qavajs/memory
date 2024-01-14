@@ -56,8 +56,8 @@ When I expect text of 'Currency Label' to equal '\\$42'
 ```
 
 ## Parallel
-In case you need to assign uniq value for each Cucumber thread you can use parallel function.
-It will assign value based on CUCUMBER_WORKER_ID env variable. 
+In case you need to assign uniq value for each Cucumber thread and qavajs shard you can use parallel function.
+It will assign value based on CUCUMBER_WORKER_ID and SHARD env variables.
 
 ```javascript
 const { parallel } = require('@qavajs/memory/utils');
@@ -67,6 +67,14 @@ class Memory {
         { username: 'user1', password: 'password' },
         { username: 'user2', password: 'password' }
     ]);
+
+    // shard mode 
+    shardUser = parallel([
+        { username: 'user1', password: 'password' },
+        { username: 'user2', password: 'password' },
+        { username: 'user3', password: 'password' },
+        { username: 'user4', password: 'password' }
+    ], { shard: true });
 }
 
 module.exports = Memory;
