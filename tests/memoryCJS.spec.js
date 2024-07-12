@@ -1,4 +1,5 @@
-import { test, expect } from 'vitest';
+import {test, expect} from 'vitest';
+
 const memory = require('../index');
 
 test('memory is singleton CJS', async () => {
