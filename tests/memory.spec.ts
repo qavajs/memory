@@ -10,7 +10,7 @@ test('computed without params returns value', () => {
 });
 
 test('computed with number param returns value', () => {
-	memory.computed = function (val) {
+	memory.computed = function (val: any) {
 		return val
 	}
 
@@ -18,7 +18,7 @@ test('computed with number param returns value', () => {
 });
 
 test('computed with string param returns value', () => {
-	memory.computed = function (val) {
+	memory.computed = function (val: any) {
 		return val
 	}
 
@@ -26,7 +26,7 @@ test('computed with string param returns value', () => {
 });
 
 test('computed with memory param returns value', () => {
-	memory.computed = function (val1, val2, val3) {
+	memory.computed = function (val1: any, val2: any, val3: any) {
 		return val1 + val2 + val3
 	}
 
@@ -100,7 +100,7 @@ test('element from array', () => {
 test('property is function (number argument)', () => {
 	memory.register({
 		someValue: {
-			fn: function (val) { return val }
+			fn: function (val: any) { return val }
 		}
 	});
 
@@ -110,7 +110,7 @@ test('property is function (number argument)', () => {
 test('property is function (string argument)', () => {
 	memory.register({
 		someValue: {
-			fn: function (val) { return val }
+			fn: function (val: any) { return val }
 		}
 	});
 
@@ -137,20 +137,20 @@ test('property from added object', () => {
 });
 
 test('comma in string param', () => {
-	const computed = (param) => param;
+	const computed = (param: any) => param;
 	memory.setValue('computed', computed);
 	expect(memory.getValue(`$computed("1,2")`)).to.equal('1,2');
 	expect(memory.getValue(`$computed('1,2')`)).to.equal('1,2');
 });
 
 test('floating param', () => {
-	const computed = (param) => param;
+	const computed = (param: any) => param;
 	memory.setValue('computed', computed);
 	expect(memory.getValue(`$computed(36.6)`)).to.eql(36.6);
 });
 
 test('store function', () => {
-	const computed = (param) => param;
+	const computed = (param: any) => param;
 	memory.setValue('computed', computed);
 	const fn = memory.getValue(`$computed`);
 	expect(fn).to.be.a('function');
@@ -191,18 +191,18 @@ test('chaining method calls', () => {
 });
 
 test('inner computed call', () => {
-	memory.setValue('comp1', function (val) { return val });
+	memory.setValue('comp1', function (val: any) { return val });
 	expect(memory.getValue('$comp1($comp1(42))')).to.equal(42);
 });
 
 test('inner method call', () => {
 	memory.setValue('obj1', {
-		method1(val) {
+		method1(val: any) {
 			return val
 		}
 	})
 	memory.setValue('obj2', {
-		method1(val) {
+		method1(val: any) {
 			return val
 		}
 	})
@@ -210,14 +210,14 @@ test('inner method call', () => {
 });
 
 test('empty string as computed param', () => {
-	memory.setValue('fn', function(val) { return val })
+	memory.setValue('fn', function(val: any) { return val })
 	expect(memory.getValue('$fn("")')).to.equal('');
 	expect(memory.getValue("$fn('')")).to.equal('');
 });
 
 test('param is property array element', () => {
 	memory.setValue('obj1', {
-		method1(val) {
+		method1(val: any) {
 			return val
 		}
 	})
@@ -229,7 +229,7 @@ test('param is property array element', () => {
 
 test('param is space containing property', () => {
 	memory.setValue('obj1', {
-		method1(val) {
+		method1(val: any) {
 			return val
 		}
 	})
@@ -242,7 +242,7 @@ test('param is space containing property', () => {
 });
 
 test('dot in computed fn string param', () => {
-	memory.setValue('fn', function (...params) {
+	memory.setValue('fn', function (...params: any) {
 		return params
 	});
 	memory.setValue('val', 10);
@@ -251,11 +251,11 @@ test('dot in computed fn string param', () => {
 
 test('dot in computed method string param', () => {
 	memory.setValue('obj', {
-		method(...params) {
+		method(...params: any[]) {
 			return params
 		}
 	});
-	memory.setValue('fn', function (...params) {
+	memory.setValue('fn', function (...params: any) {
 		return params
 	});
 	memory.setValue('val', 10);
@@ -263,7 +263,7 @@ test('dot in computed method string param', () => {
 });
 
 test('$ in computed param string', () => {
-	memory.setValue('fn', (val) => val);
+	memory.setValue('fn', (val: any) => val);
 	expect(memory.getValue('$fn("\\$56")')).to.equal('$56');
 });
 
@@ -295,6 +295,10 @@ test('non string input', () => {
 test('empty object conversion', () => {
 	memory.setValue('key', {});
 	expect(memory.getValue('$key')).to.deep.equal({});
+});
+
+test('correct error message', () => {
+	expect(() => memory.getValue('$x()')).toThrow('$x is not a function');
 });
 
 

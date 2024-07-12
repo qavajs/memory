@@ -31,7 +31,7 @@ Then value of '$variable' should be equal to '42'
 Lib provides capability to set constant values and computed (values that calculated in the moment of call)
 ```javascript
 module.exports = {
-    CONSTANT: 42,
+    constant: 42,
     now: function() {
         return Date.now()
     }

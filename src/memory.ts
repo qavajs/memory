@@ -36,7 +36,7 @@ class Memory {
      * @example const value = memory.getValue('$val');
      */
     @readonly
-    getValue(str: string) {
+    getValue(str: any): any {
         let value;
         if (typeof str !== 'string') return str;
         value = str.replace(ESCAPE_DOLLAR_REGEXP, QAVA_ESCAPE_DOLLAR);
@@ -57,7 +57,7 @@ class Memory {
      * @returns {string} - resolved string
      */
     @readonly
-    getString(str: string) {
+    getString(str: string): any {
         const matches = str.match(PARSE_STRING_REGEXP)
         if (!matches) return str;
         const variables = matches.map((match: string) => match.replace(/[{}]/g, ``));
@@ -84,12 +84,16 @@ class Memory {
      * @returns {any} - resolved value
      */
     @readonly
-    getKey(str: string) {
+    getKey(str: string): any {
         const getFunction = new Function(
             `return ${str.replace(/\$/g, 'this.')}`
                 .replace(UNESCAPE_DOLLAR_REGEXP, '$')
         );
-        return getFunction.apply(this);
+        try {
+            return getFunction.apply(this);
+        } catch (err: any) {
+            this.reportError(err);
+        }
     }
 
     /**
@@ -116,6 +120,12 @@ class Memory {
     @readonly
     setLogger(logger: { log: (value: any) => void }) {
         this.logger = logger;
+    }
+
+    @readonly
+    reportError(err: any) {
+        err.message = err.message.replace(/this\./g, '$');
+        throw err;
     }
 
 }
