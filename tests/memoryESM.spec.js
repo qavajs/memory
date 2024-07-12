@@ -1,4 +1,4 @@
-import { test, expect } from 'vitest';
+import {test, expect} from 'vitest';
 import memory from '../index';
 
 test('memory is singleton ESM', async () => {

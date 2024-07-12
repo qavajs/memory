@@ -4,6 +4,9 @@ All notable changes to the "@qavajs/memory" will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.7.1]
+- :rocket: improved error handling to produce more clear errors
+
 ## [1.7.0]
 - :rocket: updated parallel function to support qavajs shards
 

@@ -1,4 +1,4 @@
-import { test, expect } from 'vitest';
+import {test, expect} from 'vitest';
 import memory from '../src/memory';
 
 test('number', () => {
