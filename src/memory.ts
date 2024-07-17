@@ -26,7 +26,7 @@ function toString(value: any): string {
 
 class Memory {
 
-    [prop: string]: any;
+    storage: { [key: string]: any } = {};
     logger: { log: (value: any) => void } = { log() {} };
 
     /**
@@ -74,7 +74,7 @@ class Memory {
      */
     @readonly
     setValue(key: string, value: any) {
-        this[key] = value;
+        this.storage[key] = value;
     }
 
     /**
@@ -90,7 +90,7 @@ class Memory {
                 .replace(UNESCAPE_DOLLAR_REGEXP, '$')
         );
         try {
-            return getFunction.apply(this);
+            return getFunction.apply(this.storage);
         } catch (err: any) {
             this.reportError(err);
         }
@@ -102,19 +102,10 @@ class Memory {
      */
     @readonly
     register(obj: { [prop: string]: any }) {
-        for (const prop in obj) {
-            this[prop] = obj[prop];
+        this.storage = obj;
+        this.storage.js = function(expression: any) {
+            return expression;
         }
-    }
-
-    /**
-     * Evaluate js expression
-     * @param {any} expression - expression to evaluate
-     * @example $js($val + 1)
-     */
-    @readonly
-    js(expression: any) {
-        return expression;
     }
 
     @readonly
@@ -122,8 +113,7 @@ class Memory {
         this.logger = logger;
     }
 
-    @readonly
-    reportError(err: any) {
+    private reportError(err: any) {
         err.message = err.message.replace(/this\./g, '$');
         throw err;
     }

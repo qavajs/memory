@@ -4,6 +4,10 @@ All notable changes to the "@qavajs/memory" will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.8.0]
+- :rocket: added support of top-level getters
+Breaking Change: all memory values are now stored in _storage_ property
+
 ## [1.7.1]
 - :rocket: improved error handling to produce more clear errors
 
