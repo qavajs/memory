@@ -1,3 +1,3 @@
 const memory = require('../index');
 
-memory.singletonVal = 'singleton cjs';
+memory.setValue('singletonVal', 'singleton cjs');

@@ -1,8 +1,12 @@
-import {test, expect} from 'vitest';
+import {beforeEach, test, expect} from 'vitest';
 import memory from '../src/memory';
 
+beforeEach(() => {
+    memory.register({});
+});
+
 test('computed without params returns value', () => {
-    memory.computed = function () {
+    memory.storage.computed = function () {
         return 42
     }
 
@@ -10,7 +14,7 @@ test('computed without params returns value', () => {
 });
 
 test('computed with number param returns value', () => {
-    memory.computed = function (val: any) {
+    memory.storage.computed = function (val: any) {
         return val
     }
 
@@ -18,7 +22,7 @@ test('computed with number param returns value', () => {
 });
 
 test('computed with string param returns value', () => {
-    memory.computed = function (val: any) {
+    memory.storage.computed = function (val: any) {
         return val
     }
 
@@ -26,15 +30,15 @@ test('computed with string param returns value', () => {
 });
 
 test('computed with memory param returns value', () => {
-    memory.computed = function (val1: any, val2: any, val3: any) {
+    memory.storage.computed = function (val1: any, val2: any, val3: any) {
         return val1 + val2 + val3
     }
 
-    memory.anotherComputed = function () {
+    memory.storage.anotherComputed = function () {
         return 42
     }
 
-    memory.someVal = 42;
+    memory.storage.someVal = 42;
 
     expect(memory.getValue('$computed(42, $anotherComputed(), $someVal)')).to.equal(126);
 });
@@ -54,15 +58,15 @@ test('simple string returns as is', () => {
 // Query tests
 
 test('query string with one existing variable', () => {
-    memory.num = 1;
+    memory.storage.num = 1;
     const queryString = 'Component > #{$num} of Collection'
     const expected = `Component > #1 of Collection`;
     expect(memory.getValue(queryString)).to.equal(expected);
 });
 
 test('query string with two existing variables', () => {
-    memory.ind1 = 1;
-    memory.ind2 = 15;
+    memory.storage.ind1 = 1;
+    memory.storage.ind2 = 15;
     const queryString = 'Component > #{$ind1} of Collection1 > #{$ind2} of Collection2'
     const expected = `Component > #1 of Collection1 > #15 of Collection2`;
     expect(memory.getValue(queryString)).to.equal(expected);
@@ -298,7 +302,6 @@ test('interpolation without memory values', () => {
 });
 
 test('non string input', () => {
-    //@ts-ignore
     expect(memory.getValue(42)).to.equal(42);
 });
 
@@ -309,6 +312,15 @@ test('empty object conversion', () => {
 
 test('correct error message', () => {
     expect(() => memory.getValue('$x()')).toThrow('$x is not a function');
+});
+
+test('getter', () => {
+    let closure = 1;
+    memory.register({
+        get x() { return closure++ }
+    });
+    expect(memory.getValue('$x')).to.equal(1);
+    expect(memory.getValue('$x')).to.equal(2);
 });
 
 

@@ -1,3 +1,3 @@
 import memory from '../index.js';
 
-memory.singletonVal = 'singleton mjs';
+memory.setValue('singletonVal', 'singleton mjs');

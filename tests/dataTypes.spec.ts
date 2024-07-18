@@ -1,5 +1,9 @@
-import {test, expect} from 'vitest';
+import {test, expect, beforeEach} from 'vitest';
 import memory from '../src/memory';
+
+beforeEach(() => {
+    memory.register({});
+});
 
 test('number', () => {
     expect(memory.getValue('$js(1)')).to.equal(1);
