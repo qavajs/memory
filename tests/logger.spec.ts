@@ -77,3 +77,8 @@ test('log long string', () => {
     memory.getValue('$key');
     expect(logger.logs.pop()).to.equal(`$key -> ${thousand}`);
 });
+
+test('log long string', () => {
+    memory.setValue('key', '123');
+    expect(logger.logs.pop()).to.equal(`$key <- 123`);
+});
