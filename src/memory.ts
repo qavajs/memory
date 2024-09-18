@@ -74,6 +74,7 @@ class Memory {
      */
     @readonly
     setValue(key: string, value: any) {
+        this.logger.log(`$${key} <- ${toString(value)}`);
         this.storage[key] = value;
     }
 
