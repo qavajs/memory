@@ -323,6 +323,11 @@ test('getter', () => {
     expect(memory.getValue('$x')).to.equal(2);
 });
 
+test('escape curly braces', () => {
+    memory.setValue('fn', (text: string) => 'inner value');
+    expect(memory.getValue('template {$fn("{inner value}")}')).to.equal('template inner value');
+});
+
 
 
 

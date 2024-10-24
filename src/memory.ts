@@ -1,6 +1,6 @@
 const QAVA_ESCAPE_DOLLAR = 'QAVA_ESCAPE_DOLLAR';
 const KEY_REGEXP = /^\$(.+?)(\((.*)\))?$/;
-const PARSE_STRING_REGEXP = /({\$.+?})/g;
+const PARSE_STRING_REGEXP = /({\$.+?})/;
 const ESCAPE_DOLLAR_REGEXP = /\\\$/g;
 const UNESCAPE_DOLLAR_REGEXP = new RegExp(QAVA_ESCAPE_DOLLAR, 'g');
 const TRUNCATE_LOG = 1000;
@@ -9,6 +9,12 @@ function readonly(target: any, propertyKey: string, descriptor: PropertyDescript
     descriptor.writable = false;
 }
 
+class MemoryError extends Error {
+    constructor(error: any) {
+        error.message = error.message.replace(/this\./g, '$');
+        super(error);
+    }
+}
 function toString(value: any): string {
     let logValue = value;
     try {
@@ -26,7 +32,7 @@ function toString(value: any): string {
 
 class Memory {
 
-    storage: { [key: string]: any } = {};
+    storage: Record<string, any> = {};
     logger: { log: (value: any) => void } = { log() {} };
 
     /**
@@ -45,7 +51,7 @@ class Memory {
         if (typeof value === 'string') value = value.replace(UNESCAPE_DOLLAR_REGEXP, '$');
         const stringValue = toString(value);
         if (stringValue !== str) {
-            this.logger.log(`${str} -> ${toString(value)}`);
+            this.logger.log(`${str} -> ${stringValue}`);
         }
         return value;
     }
@@ -58,10 +64,10 @@ class Memory {
      */
     @readonly
     getString(str: string): any {
-        const matches = str.match(PARSE_STRING_REGEXP)
+        const matches = this.extractExpressions(str).filter(match => PARSE_STRING_REGEXP.exec(match));
         if (!matches) return str;
-        const variables = matches.map((match: string) => match.replace(/[{}]/g, ``));
-        return variables
+        return matches
+            .map((match: string) => match.replace(/(^{|}$)/g, ``))
             .reduce((str: string, variable: any) => str.replace(`{${variable}}`, this.getKey(variable)), str)
             .replace(UNESCAPE_DOLLAR_REGEXP, '$');
     }
@@ -93,16 +99,16 @@ class Memory {
         try {
             return getFunction.apply(this.storage);
         } catch (err: any) {
-            this.reportError(err);
+            throw new MemoryError(err);
         }
     }
 
     /**
      * Register memory object
-     * @param {{ [prop: string]: any }} obj - memory object to register
+     * @param {Record<string, any>} obj - memory object to register
      */
     @readonly
-    register(obj: { [prop: string]: any }) {
+    register(obj: Record<string, any>) {
         this.storage = obj;
         this.storage.js = function(expression: any) {
             return expression;
@@ -114,9 +120,20 @@ class Memory {
         this.logger = logger;
     }
 
-    private reportError(err: any) {
-        err.message = err.message.replace(/this\./g, '$');
-        throw err;
+    private extractExpressions(text: string) {
+        const braces = [];
+        const stack = [];
+
+        for (let i = 0; i < text.length; i++) {
+            if (text[i] === '{') {
+                stack.push(i);
+            } else if (text[i] === '}' && stack.length > 0) {
+                const start = stack.pop();
+                braces.push(text.substring(start as number, i + 1));
+            }
+        }
+
+        return braces;
     }
 
 }
