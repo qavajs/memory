@@ -4,7 +4,8 @@ All notable changes to the "@qavajs/memory" will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [1.9.1]
+## [1.10.0]
+- :rocket: added export of Memory type
 - :beetle: fixed issue with nested curly braces
 
 ## [1.9.0]

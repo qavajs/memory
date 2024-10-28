@@ -2,7 +2,7 @@ declare interface Logger {
     log(value: any): void;
 }
 
-declare type Memory = {
+export type Memory = {
     /**
      * Get value from memory
      * @param key
@@ -38,4 +38,4 @@ declare type Memory = {
     setLogger(logger: Logger): void;
 }
 declare const memory: Memory;
-export = memory;
+export default memory;
