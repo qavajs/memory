@@ -64,7 +64,7 @@ class Memory {
      */
     @readonly
     getString(str: string): any {
-        const matches = this.extractExpressions(str).filter(match => PARSE_STRING_REGEXP.exec(match));
+        const matches = this.extractExpressions(str).filter(match => /(^{\$.+?})/g.exec(match));
         if (!matches) return str;
         return matches
             .map((match: string) => match.replace(/(^{|}$)/g, ``))

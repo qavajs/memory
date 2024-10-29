@@ -328,6 +328,11 @@ test('escape curly braces', () => {
     expect(memory.getValue('template {$fn("{inner value}")}')).to.equal('template inner value');
 });
 
+test('resolve json', () => {
+    memory.setValue('randomName', (text: string) => 'random');
+    const json = `{"email": "{$randomName(6)}+{$randomName(6)}"}`
+    expect(memory.getValue(json)).to.equal('{"email": "random+random"}');
+});
 
 
 
