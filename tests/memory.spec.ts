@@ -314,6 +314,10 @@ test('correct error message', () => {
     expect(() => memory.getValue('$x()')).toThrow('$x is not a function');
 });
 
+test('correct error message in template string', () => {
+    expect(() => memory.getValue('{$x()}')).toThrow('$x is not a function');
+});
+
 test('getter', () => {
     let closure = 1;
     memory.register({
@@ -328,6 +332,11 @@ test('escape curly braces', () => {
     expect(memory.getValue('template {$fn("{inner value}")}')).to.equal('template inner value');
 });
 
+test('resolve json', () => {
+    memory.setValue('randomName', (text: string) => 'random');
+    const json = `{"email": "{$randomName(6)}+{$randomName(6)}"}`
+    expect(memory.getValue(json)).to.equal('{"email": "random+random"}');
+});
 
 
 
