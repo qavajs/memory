@@ -64,12 +64,15 @@ class Memory {
      */
     @readonly
     getString(str: string): any {
-        const matches = this.extractExpressions(str).filter(match => /(^{\$.+?})/g.exec(match));
-        if (!matches) return str;
-        return matches
-            .map((match: string) => match.replace(/(^{|}$)/g, ``))
-            .reduce((str: string, variable: any) => str.replace(`{${variable}}`, this.getKey(variable)), str)
-            .replace(UNESCAPE_DOLLAR_REGEXP, '$');
+        const getFunction = new Function(
+            `return \`${str.replaceAll(`{$`, '${this.')}\``
+                .replace(UNESCAPE_DOLLAR_REGEXP, '$')
+        );
+        try {
+            return getFunction.apply(this.storage);
+        } catch (err: any) {
+            throw new MemoryError(err);
+        }
     }
 
     /**
@@ -93,7 +96,7 @@ class Memory {
     @readonly
     getKey(str: string): any {
         const getFunction = new Function(
-            `return ${str.replace(/\$/g, 'this.')}`
+            `return ${str.replaceAll('$', 'this.')}`
                 .replace(UNESCAPE_DOLLAR_REGEXP, '$')
         );
         try {
@@ -118,22 +121,6 @@ class Memory {
     @readonly
     setLogger(logger: { log: (value: any) => void }) {
         this.logger = logger;
-    }
-
-    private extractExpressions(text: string) {
-        const braces = [];
-        const stack = [];
-
-        for (let i = 0; i < text.length; i++) {
-            if (text[i] === '{') {
-                stack.push(i);
-            } else if (text[i] === '}' && stack.length > 0) {
-                const start = stack.pop();
-                braces.push(text.substring(start as number, i + 1));
-            }
-        }
-
-        return braces;
     }
 
 }

@@ -314,6 +314,10 @@ test('correct error message', () => {
     expect(() => memory.getValue('$x()')).toThrow('$x is not a function');
 });
 
+test('correct error message in template string', () => {
+    expect(() => memory.getValue('{$x()}')).toThrow('$x is not a function');
+});
+
 test('getter', () => {
     let closure = 1;
     memory.register({
