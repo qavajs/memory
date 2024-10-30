@@ -65,7 +65,7 @@ class Memory {
     @readonly
     getString(str: string): any {
         const getFunction = new Function(
-            `return \`${str.replaceAll(`{$`, '${this.')}\``
+            `return \`${str.replaceAll('$', 'this.').replaceAll('{this.', '${this.')}\``
                 .replace(UNESCAPE_DOLLAR_REGEXP, '$')
         );
         try {
