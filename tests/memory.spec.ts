@@ -338,6 +338,14 @@ test('resolve json', () => {
     expect(memory.getValue(json)).to.equal('{"email": "random+random"}');
 });
 
+test('resolve template with function', () => {
+    memory.setValue('x', (text: string) => text);
+    memory.setValue('y', 42);
+    const expression = 'text {$x($y)}';
+    expect(memory.getValue(expression)).to.equal('text 42');
+});
+
+
 
 
 
