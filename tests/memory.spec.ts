@@ -345,6 +345,11 @@ test('resolve template with function', () => {
     expect(memory.getValue(expression)).to.equal('text 42');
 });
 
+test('$js has access to memory context', () => {
+    memory.setValue('value', 42);
+    expect(memory.getValue('$js(this.value)')).to.equal(42);
+});
+
 
 
 
