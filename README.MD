@@ -2,14 +2,16 @@
 
 ## @qavajs/memory
 
-This library provides single storage of variables for @qavajs framework
+Unified test data storage for the `@qavajs` framework
 
-`npm install @qavajs/memory`
+```
+npm install @qavajs/memory
+```
 ## Usage
        
-Lib resolves provided value from storage
-```javascript
-const memory = require('@qavajs/memory');
+The module resolves the provided value from storage
+```typescript
+import memory from '@qavajs/memory';
 
 When(/^save variable as '(.+)'$/, async function (key) {
     memory.setValue(key, 42);
@@ -28,9 +30,9 @@ Then value of '$variable' should be equal to '42'
 
 ## Using constants and computed
 
-Lib provides capability to set constant values and computed (values that calculated in the moment of call)
-```javascript
-module.exports = {
+The module provides the capability to set constant values and computed (values that are calculated at the moment of call)
+```typescript
+export default {
     constant: 42,
     now: function() {
         return Date.now()
@@ -38,31 +40,32 @@ module.exports = {
 };
 ```
 ## Register constants and computed
-Before using memory it needs to be registered. The best place to do it is Before hook
+Before using memory, it needs to be registered. The best place to do it is `Before` hook
 
-```javascript
-const memory = require('@qavajs/memory');
-const memoryMap = require('./memoryMap.js')
+```typescript
+import memory from '@qavajs/memory';
+import memoryMap from './memoryMap.js';
+
 Before(async function() {
     memory.register(memoryMap);
 });
 ```
 
-## Escape $
-_$_ can be escaped with double backslash
+## Escape `$`
+`$` can be escaped with a double backslash
 
 ```Gherkin
 When I expect text of 'Currency Label' to equal '\\$42'
 ```
 
 ## Parallel
-In case you need to assign uniq value for each Cucumber thread and qavajs shard you can use parallel function.
-It will assign value based on CUCUMBER_WORKER_ID and SHARD env variables.
+In case you need to assign a unique value for each Cucumber thread and qavajs shard, you can use a `parallel` function.
+It will assign value based on `CUCUMBER_WORKER_ID` and `SHARD` env variables.
 
-```javascript
-const { parallel } = require('@qavajs/memory/utils');
+```typescript
+import { parallel } from '@qavajs/memory/utils';
 
-class Memory {
+export default class Memory {
     user = parallel([
         { username: 'user1', password: 'password' },
         { username: 'user2', password: 'password' }
@@ -76,6 +79,4 @@ class Memory {
         { username: 'user4', password: 'password' }
     ], { shard: true });
 }
-
-module.exports = Memory;
 ```
