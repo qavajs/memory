@@ -7,6 +7,7 @@ Unified test data storage for the `@qavajs` framework
 ```
 npm install @qavajs/memory
 ```
+
 ## Usage
        
 The module resolves the provided value from storage

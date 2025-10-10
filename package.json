@@ -1,6 +1,6 @@
 {
   "name": "@qavajs/memory",
-  "version": "1.10.2",
+  "version": "1.10.3",
   "description": "memory package for @qavajs framework",
   "main": "index.js",
   "scripts": {
@@ -13,10 +13,43 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^22.13.10",
-    "@vitest/coverage-v8": "^3.0.8",
-    "@vitest/ui": "^3.0.8",
-    "typescript": "^5.8.2",
-    "vitest": "^3.0.8"
-  }
+    "@types/node": "^24.7.1",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qavajs/memory.git"
+  },
+  "bugs": {
+    "url": "https://github.com/qavajs/memory/issues"
+  },
+  "homepage": "https://github.com/qavajs/memory#readme",
+  "keywords": [
+    "test",
+    "automation",
+    "testing",
+    "qa",
+    "quality-assurance",
+    "test-framework",
+    "test-runner",
+    "test-automation",
+    "e2e",
+    "end-to-end",
+    "ui-testing",
+    "api-testing",
+    "integration-testing",
+    "acceptance-testing",
+    "functional-testing",
+    "browser-testing",
+    "mobile-testing",
+    "cross-browser",
+    "bdd",
+    "gherkin",
+    "assertions",
+    "continuous-delivery",
+    "automation-framework"
+  ]
 }
