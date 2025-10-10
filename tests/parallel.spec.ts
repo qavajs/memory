@@ -1,5 +1,5 @@
 import {test, expect, beforeEach} from 'vitest';
-import {parallel} from '../utils';
+import {parallel} from '../src/utils';
 
 const entries = [1, 2, 3, 4];
 

@@ -1,1 +1,1 @@
-export function parallel(entries: any[], options?: { shard: boolean }): any;
+export * from './lib/utils';

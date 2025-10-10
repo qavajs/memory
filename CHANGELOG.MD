@@ -4,6 +4,9 @@ All notable changes to the "@qavajs/memory" will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.10.3]
+- :beetle: fixed `parallel` util function to allow undefined values
+
 ## [1.10.2]
 - :beetle: fixed issue with calling functions in templates
 
