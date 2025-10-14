@@ -4,6 +4,20 @@ All notable changes to the "@qavajs/memory" will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+:rocket: - new feature  
+:beetle: - bugfix  
+:x: - deprecation/removal  
+:pencil: - chore  
+:microscope: - experimental
+
+## [Unreleased]
+- :rocket: moved `toString` util to memory instance as `convertToString` method to enable alteration of stringify logic
+```typescript
+memory.convertToString = function(value: string) {
+    return util.inspect(value);
+}
+```
+
 ## [1.10.3]
 - :beetle: fixed `parallel` util function to allow undefined values
 

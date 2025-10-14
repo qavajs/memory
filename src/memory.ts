@@ -15,23 +15,8 @@ class MemoryError extends Error {
         super(error);
     }
 }
-function toString(value: any): string {
-    let logValue = value;
-    try {
-        if (typeof value === 'object') {
-            logValue = JSON.stringify(value, null, 2);
-        }
-    } catch (err) {
-        logValue = value.toString();
-    }
-    if (typeof logValue === 'string') {
-        return logValue.slice(0, TRUNCATE_LOG);
-    }
-    return logValue;
-}
 
 class Memory {
-
     storage: Record<string, any> = {};
     logger: { log: (value: any) => void } = { log() {} };
 
@@ -49,7 +34,7 @@ class Memory {
         if (KEY_REGEXP.test(value)) value = this.getKey(value);
         else if (PARSE_STRING_REGEXP.test(value)) value = this.getString(value);
         if (typeof value === 'string') value = value.replace(UNESCAPE_DOLLAR_REGEXP, '$');
-        const stringValue = toString(value);
+        const stringValue = this.convertToString(value);
         if (stringValue !== str) {
             this.logger.log(`${str} -> ${stringValue}`);
         }
@@ -83,7 +68,7 @@ class Memory {
      */
     @readonly
     setValue(key: string, value: any) {
-        this.logger.log(`$${key} <- ${toString(value)}`);
+        this.logger.log(`$${key} <- ${this.convertToString(value)}`);
         this.storage[key] = value;
     }
 
@@ -121,6 +106,21 @@ class Memory {
     @readonly
     setLogger(logger: { log: (value: any) => void }) {
         this.logger = logger;
+    }
+
+    convertToString(value: any): string {
+        let logValue = value;
+        try {
+            if (typeof value === 'object') {
+                logValue = JSON.stringify(value, null, 2);
+            }
+        } catch (err) {
+            logValue = value.toString();
+        }
+        if (typeof logValue === 'string') {
+            return logValue.slice(0, TRUNCATE_LOG);
+        }
+        return logValue;
     }
 
 }
