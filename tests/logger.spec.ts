@@ -47,7 +47,7 @@ test('log function', () => {
         console.log(42)
     });
     memory.getValue('$key');
-    expect(logger.logs.pop()).to.equal(`$key -> () => {\n    console.log(42);\n  }`);
+    expect(logger.logs.pop()).to.equal(`$key -> () => {\n\t\tconsole.log(42);\n\t}`);
 });
 
 test('log circular object', () => {

@@ -10,11 +10,15 @@
     "module": "node16",
     "moduleResolution": "node16",
     "outDir": "./lib",
+    "rootDir": "./src",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "experimentalDecorators": true,
     "declaration": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "types": [
+      "node"
+    ]
   }
 }
