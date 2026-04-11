@@ -10,11 +10,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 :pencil: - chore  
 :microscope: - experimental
 
-## [Unreleased]
+## [1.11.0]
 - :rocket: moved `toString` util to memory instance as `convertToString` method to enable alteration of stringify logic
 ```typescript
 memory.convertToString = function(value: string) {
-    return util.inspect(value);
+  return util.inspect(value);
 }
 ```
 

@@ -1,6 +1,6 @@
 {
   "name": "@qavajs/memory",
-  "version": "1.10.3",
+  "version": "1.11.0",
   "description": "memory package for @qavajs framework",
   "main": "index.js",
   "scripts": {
@@ -13,11 +13,11 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^24.7.2",
-    "@vitest/coverage-v8": "^3.2.4",
-    "@vitest/ui": "^3.2.4",
-    "typescript": "^5.9.3",
-    "vitest": "^3.2.4"
+    "@types/node": "^25.6.0",
+    "@vitest/coverage-v8": "^4.1.4",
+    "@vitest/ui": "^4.1.4",
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.4"
   },
   "repository": {
     "type": "git",
